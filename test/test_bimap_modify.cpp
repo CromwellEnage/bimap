@@ -17,25 +17,25 @@
 
 #include <boost/config.hpp>
 
-// Boost.Test
-#include <boost/test/minimal.hpp>
+// Boost.Core.LightweightTest
+#include <boost/core/lightweight_test.hpp>
 
 // Boost.Bimap
 #include <boost/bimap/support/lambda.hpp>
 #include <boost/bimap/bimap.hpp>
 
-struct id{};
+struct id
+{
+};
 
 void test_bimap_modify()
 {
-    using namespace boost::bimaps;
-
-    typedef bimap<int,long> bm;
+    typedef boost::bimaps::bimap<int,long> bm;
 
     bm b;
-    b.insert( bm::value_type(2,200) );
+    b.insert(bm::value_type(2, 200));
 
-    BOOST_CHECK( b.left.at(2) == 200 );
+    BOOST_TEST(b.left.at(2) == 200);
 
     bool result;
 
@@ -46,327 +46,334 @@ void test_bimap_modify()
     {
         bm::left_iterator i = b.left.begin();
 
-        result = b.left.replace( i, bm::left_value_type(1,100) );
+        result = b.left.replace(i, bm::left_value_type(1, 100));
 
-        BOOST_CHECK( result );
-        BOOST_CHECK( b.size() == 1 );
-        BOOST_CHECK( i->first == 1 && i->second == 100 );
-        BOOST_CHECK( b.left.at(1) == 100 );
+        BOOST_TEST(result);
+        BOOST_TEST(b.size() == 1);
+        BOOST_TEST((i->first == 1) && (i->second == 100));
+        BOOST_TEST(b.left.at(1) == 100);
 
-        result = b.left.replace_key( i, 2 );
+        result = b.left.replace_key(i, 2);
 
-        BOOST_CHECK( result );
-        BOOST_CHECK( b.size() == 1 );
-        BOOST_CHECK( i->first == 2 && i->second == 100 );
-        BOOST_CHECK( b.left.at(2) == 100 );
+        BOOST_TEST(result);
+        BOOST_TEST(b.size() == 1);
+        BOOST_TEST((i->first == 2) && (i->second == 100));
+        BOOST_TEST(b.left.at(2) == 100);
 
-        result = b.left.replace_data( i, 200 );
+        result = b.left.replace_data(i, 200);
 
-        BOOST_CHECK( result );
-        BOOST_CHECK( b.size() == 1 );
-        BOOST_CHECK( i->first == 2 && i->second == 200 );
-        BOOST_CHECK( b.left.at(2) == 200 );
+        BOOST_TEST(result);
+        BOOST_TEST(b.size() == 1);
+        BOOST_TEST((i->first == 2) && (i->second == 200));
+        BOOST_TEST(b.left.at(2) == 200);
     }
 
     // successful replace in right map view
     {
         bm::right_iterator i = b.right.begin();
 
-        result = b.right.replace( i, bm::right_value_type(100,1) );
+        result = b.right.replace(i, bm::right_value_type(100, 1));
 
-        BOOST_CHECK( result );
-        BOOST_CHECK( b.size() == 1 );
-        BOOST_CHECK( i->first == 100 && i->second == 1 );
-        BOOST_CHECK( b.right.at(100) == 1 );
+        BOOST_TEST(result);
+        BOOST_TEST(b.size() == 1);
+        BOOST_TEST((i->first == 100) && (i->second == 1));
+        BOOST_TEST(b.right.at(100) == 1);
 
-        result = b.right.replace_key( i, 200 );
+        result = b.right.replace_key(i, 200);
 
-        BOOST_CHECK( result );
-        BOOST_CHECK( b.size() == 1 );
-        BOOST_CHECK( i->first == 200 && i->second == 1 );
-        BOOST_CHECK( b.right.at(200) == 1 );
+        BOOST_TEST(result);
+        BOOST_TEST(b.size() == 1);
+        BOOST_TEST((i->first == 200) && (i->second == 1));
+        BOOST_TEST(b.right.at(200) == 1);
 
-        result = b.right.replace_data( i, 2 );
+        result = b.right.replace_data(i, 2);
 
-        BOOST_CHECK( result );
-        BOOST_CHECK( b.size() == 1 );
-        BOOST_CHECK( i->first == 200 && i->second == 2 );
-        BOOST_CHECK( b.right.at(200) == 2 );
+        BOOST_TEST(result);
+        BOOST_TEST(b.size() == 1);
+        BOOST_TEST((i->first == 200) && (i->second == 2));
+        BOOST_TEST(b.right.at(200) == 2);
     }
 
     // successful replace in set of relations view
     {
         bm::iterator i = b.begin();
 
-        result = b.replace( i, bm::value_type(1,100) );
+        result = b.replace(i, bm::value_type(1, 100));
 
-        BOOST_CHECK( result );
-        BOOST_CHECK( b.size() == 1 );
-        BOOST_CHECK( i->left == 1 && i->right == 100 );
-        BOOST_CHECK( b.left.at(1) == 100 );
-        BOOST_CHECK( b.right.at(100) == 1 );
+        BOOST_TEST(result);
+        BOOST_TEST(b.size() == 1);
+        BOOST_TEST((i->left == 1) && (i->right == 100));
+        BOOST_TEST(b.left.at(1) == 100);
+        BOOST_TEST(b.right.at(100) == 1);
 
-        result = b.replace_left( i, 2 );
+        result = b.replace_left(i, 2);
 
-        BOOST_CHECK( result );
-        BOOST_CHECK( b.size() == 1 );
-        BOOST_CHECK( i->left == 2 && i->right == 100 );
-        BOOST_CHECK( b.left.at(2) == 100 );
-        BOOST_CHECK( b.right.at(100) == 2 );
+        BOOST_TEST(result);
+        BOOST_TEST(b.size() == 1);
+        BOOST_TEST((i->left == 2) && (i->right == 100));
+        BOOST_TEST(b.left.at(2) == 100);
+        BOOST_TEST(b.right.at(100) == 2);
 
-        result = b.replace_right( b.begin(), 200 );
+        result = b.replace_right(b.begin(), 200);
 
-        BOOST_CHECK( result );
-        BOOST_CHECK( b.size() == 1 );
-        BOOST_CHECK( i->left == 2 && i->right == 200 );
-        BOOST_CHECK( b.left.at(2) == 200 );
-        BOOST_CHECK( b.right.at(200) == 2 );
+        BOOST_TEST(result);
+        BOOST_TEST(b.size() == 1);
+        BOOST_TEST((i->left == 2) && (i->right == 200));
+        BOOST_TEST(b.left.at(2) == 200);
+        BOOST_TEST(b.right.at(200) == 2);
     }
 
     b.clear();
-    b.insert( bm::value_type(1,100) );
-    b.insert( bm::value_type(2,200) );
+    b.insert(bm::value_type(1, 100));
+    b.insert(bm::value_type(2, 200));
 
     // fail to replace in left map view
     {
         bm::left_iterator i = b.left.begin();
 
-        result = b.left.replace( i, bm::left_value_type(2,100) );
+        result = b.left.replace(i, bm::left_value_type(2, 100));
 
-        BOOST_CHECK( ! result );
-        BOOST_CHECK( b.size() == 2 );
-        BOOST_CHECK( i->first == 1 && i->second == 100 );
-        BOOST_CHECK( b.left.at(1) == 100 );
-        BOOST_CHECK( b.left.at(2) == 200 );
+        BOOST_TEST(!result);
+        BOOST_TEST(b.size() == 2);
+        BOOST_TEST((i->first == 1) && (i->second == 100));
+        BOOST_TEST(b.left.at(1) == 100);
+        BOOST_TEST(b.left.at(2) == 200);
 
-        result = b.left.replace_key( i, 2 );
+        result = b.left.replace_key(i, 2);
 
-        BOOST_CHECK( ! result );
-        BOOST_CHECK( b.size() == 2 );
-        BOOST_CHECK( i->first == 1 && i->second == 100 );
-        BOOST_CHECK( b.left.at(1) == 100 );
-        BOOST_CHECK( b.left.at(2) == 200 );
+        BOOST_TEST(!result);
+        BOOST_TEST(b.size() == 2);
+        BOOST_TEST((i->first == 1) && (i->second == 100));
+        BOOST_TEST(b.left.at(1) == 100);
+        BOOST_TEST(b.left.at(2) == 200);
 
-        result = b.left.replace_data( i, 200 );
+        result = b.left.replace_data(i, 200);
 
-        BOOST_CHECK( ! result );
-        BOOST_CHECK( b.size() == 2 );
-        BOOST_CHECK( i->first == 1 && i->second == 100 );
-        BOOST_CHECK( b.left.at(1) == 100 );
-        BOOST_CHECK( b.left.at(2) == 200 );
+        BOOST_TEST(!result);
+        BOOST_TEST(b.size() == 2);
+        BOOST_TEST((i->first == 1) && (i->second == 100));
+        BOOST_TEST(b.left.at(1) == 100);
+        BOOST_TEST(b.left.at(2) == 200);
     }
 
     // fail to replace in right map view
     {
         bm::right_iterator i = b.right.begin();
 
-        result = b.right.replace( i, bm::right_value_type(100,2) );
+        result = b.right.replace(i, bm::right_value_type(100, 2));
 
-        BOOST_CHECK( !result );
-        BOOST_CHECK( b.size() == 2 );
-        BOOST_CHECK( (i->first == 100) && (i->second == 1) );
-        BOOST_CHECK( b.right.at(100) == 1 );
-        BOOST_CHECK( b.right.at(200) == 2 );
+        BOOST_TEST(!result);
+        BOOST_TEST(b.size() == 2);
+        BOOST_TEST((i->first == 100) && (i->second == 1));
+        BOOST_TEST(b.right.at(100) == 1);
+        BOOST_TEST(b.right.at(200) == 2);
 
-        result = b.right.replace_key( i, 200 );
+        result = b.right.replace_key(i, 200);
 
-        BOOST_CHECK( !result );
-        BOOST_CHECK( b.size() == 2 );
-        BOOST_CHECK( (i->first == 100) && (i->second == 1) );
-        BOOST_CHECK( b.right.at(100) == 1 );
-        BOOST_CHECK( b.right.at(200) == 2 );
+        BOOST_TEST(!result);
+        BOOST_TEST(b.size() == 2);
+        BOOST_TEST((i->first == 100) && (i->second == 1));
+        BOOST_TEST(b.right.at(100) == 1);
+        BOOST_TEST(b.right.at(200) == 2);
 
-        result = b.right.replace_data( i, 2 );
+        result = b.right.replace_data(i, 2);
 
-        BOOST_CHECK( !result );
-        BOOST_CHECK( b.size() == 2 );
-        BOOST_CHECK( (i->first == 100) && (i->second == 1) );
-        BOOST_CHECK( b.right.at(100) == 1 );
-        BOOST_CHECK( b.right.at(200) == 2 );
+        BOOST_TEST(!result);
+        BOOST_TEST(b.size() == 2);
+        BOOST_TEST((i->first == 100) && (i->second == 1));
+        BOOST_TEST(b.right.at(100) == 1);
+        BOOST_TEST(b.right.at(200) == 2);
     }
 
     // fail to replace in set of relations view
     {
         bm::iterator i = b.begin();
 
-        result = b.replace( i, bm::value_type(2,100) );
+        result = b.replace(i, bm::value_type(2, 100));
 
-        BOOST_CHECK( !result );
-        BOOST_CHECK( b.size() == 2 );
-        BOOST_CHECK( i->left == 1 && i->right == 100 );
-        BOOST_CHECK( b.left.at(1) == 100 );
-        BOOST_CHECK( b.right.at(100) == 1 );
+        BOOST_TEST(!result);
+        BOOST_TEST(b.size() == 2);
+        BOOST_TEST((i->left == 1) && (i->right == 100));
+        BOOST_TEST(b.left.at(1) == 100);
+        BOOST_TEST(b.right.at(100) == 1);
 
-        result = b.replace( i, bm::value_type(1,200) );
+        result = b.replace(i, bm::value_type(1, 200));
 
-        BOOST_CHECK( !result );
-        BOOST_CHECK( b.size() == 2 );
-        BOOST_CHECK( i->left == 1 && i->right == 100 );
-        BOOST_CHECK( b.left.at(1) == 100 );
-        BOOST_CHECK( b.right.at(100) == 1 );
+        BOOST_TEST(!result);
+        BOOST_TEST(b.size() == 2);
+        BOOST_TEST((i->left == 1) && (i->right == 100));
+        BOOST_TEST(b.left.at(1) == 100);
+        BOOST_TEST(b.right.at(100) == 1);
 
-        result = b.replace_left( i, 2 );
+        result = b.replace_left(i, 2);
 
-        BOOST_CHECK( !result );
-        BOOST_CHECK( b.size() == 2 );
-        BOOST_CHECK( i->left == 1 && i->right == 100 );
-        BOOST_CHECK( b.left.at(1) == 100 );
-        BOOST_CHECK( b.right.at(100) == 1 );
+        BOOST_TEST(!result);
+        BOOST_TEST(b.size() == 2);
+        BOOST_TEST((i->left == 1) && (i->right == 100));
+        BOOST_TEST(b.left.at(1) == 100);
+        BOOST_TEST(b.right.at(100) == 1);
 
-        result = b.replace_right( b.begin(), 200 );
+        result = b.replace_right(b.begin(), 200);
 
-        BOOST_CHECK( !result );
-        BOOST_CHECK( b.size() == 2 );
-        BOOST_CHECK( i->left == 1 && i->right == 100 );
-        BOOST_CHECK( b.left.at(1) == 100 );
-        BOOST_CHECK( b.right.at(100) == 1 );
+        BOOST_TEST(!result);
+        BOOST_TEST(b.size() == 2);
+        BOOST_TEST((i->left == 1) && (i->right == 100));
+        BOOST_TEST(b.left.at(1) == 100);
+        BOOST_TEST(b.right.at(100) == 1);
     }
 
     // modify
     // ----------------------------------------------------------------------
 
     b.clear();
-    b.insert( bm::value_type(1,100) );
+    b.insert(bm::value_type(1, 100));
 
     // successful modify in left map view
     {
-        result = b.left.modify_key( b.left.begin(), _key = 2 );
+        result = b.left.modify_key(b.left.begin(), boost::bimaps::_key = 2);
 
-        BOOST_CHECK( result );
-        BOOST_CHECK( b.size() == 1 );
-        BOOST_CHECK( b.left.at(2) == 100 );
+        BOOST_TEST(result);
+        BOOST_TEST(b.size() == 1);
+        BOOST_TEST(b.left.at(2) == 100);
 
-        result = b.left.modify_data( b.left.begin(), _data = 200 );
+        result = b.left.modify_data(
+            b.left.begin()
+          , boost::bimaps::_data = 200
+        );
 
-        BOOST_CHECK( result );
-        BOOST_CHECK( b.size() == 1 );
-        BOOST_CHECK( b.left.at(2) == 200 );
+        BOOST_TEST(result);
+        BOOST_TEST(b.size() == 1);
+        BOOST_TEST(b.left.at(2) == 200);
     }
 
     // successful modify in right map view
     {
-        result = b.right.modify_key( b.right.begin(), _key = 100 );
+        result = b.right.modify_key(b.right.begin(), boost::bimaps::_key = 100);
 
-        BOOST_CHECK( result );
-        BOOST_CHECK( b.size() == 1 );
-        BOOST_CHECK( b.right.at(100) == 2 );
+        BOOST_TEST(result);
+        BOOST_TEST(b.size() == 1);
+        BOOST_TEST(b.right.at(100) == 2);
 
-        result = b.right.modify_data( b.right.begin(), _data = 1 );
+        result = b.right.modify_data(b.right.begin(), boost::bimaps::_data = 1);
 
-        BOOST_CHECK( result );
-        BOOST_CHECK( b.size() == 1 );
-        BOOST_CHECK( b.right.at(100) == 1 );
+        BOOST_TEST(result);
+        BOOST_TEST(b.size() == 1);
+        BOOST_TEST(b.right.at(100) == 1);
     }
 
     // fail to modify in left map view
     {
-        b.insert( bm::value_type(2,200) );
-        result = b.left.modify_key( b.left.begin(), _key = 2 );
+        b.insert(bm::value_type(2, 200));
+        result = b.left.modify_key(b.left.begin(), boost::bimaps::_key = 2);
 
-        BOOST_CHECK( !result );
-        BOOST_CHECK( b.size() == 1 );
-        BOOST_CHECK( b.left.find(1) == b.left.end() );
-        BOOST_CHECK( b.right.find(100) == b.right.end() );
+        BOOST_TEST(!result);
+        BOOST_TEST(b.size() == 1);
+        BOOST_TEST(b.left.find(1) == b.left.end());
+        BOOST_TEST(b.right.find(100) == b.right.end());
 
-        b.insert( bm::value_type(1,100) );
-        result = b.left.modify_data( b.left.begin(), _data = 200 );
+        b.insert(bm::value_type(1, 100));
+        result = b.left.modify_data(b.left.begin(), boost::bimaps::_data = 200);
 
-        BOOST_CHECK( !result );
-        BOOST_CHECK( b.size() == 1 );
-        BOOST_CHECK( b.left.find(1) == b.left.end() );
-        BOOST_CHECK( b.right.find(100) == b.right.end() );
+        BOOST_TEST(!result);
+        BOOST_TEST(b.size() == 1);
+        BOOST_TEST(b.left.find(1) == b.left.end());
+        BOOST_TEST(b.right.find(100) == b.right.end());
     }
 
     // fail to modify in right map view
     {
-        b.insert( bm::value_type(1,100) );
-        result = b.right.modify_key( b.right.begin(), _key = 200 );
+        b.insert(bm::value_type(1, 100));
+        result = b.right.modify_key(
+            b.right.begin()
+          , boost::bimaps::_key = 200
+        );
 
-        BOOST_CHECK( !result );
-        BOOST_CHECK( b.size() == 1 );
-        BOOST_CHECK( b.left.find(1) == b.left.end() );
-        BOOST_CHECK( b.right.find(100) == b.right.end() );
+        BOOST_TEST(!result);
+        BOOST_TEST(b.size() == 1);
+        BOOST_TEST(b.left.find(1) == b.left.end());
+        BOOST_TEST(b.right.find(100) == b.right.end());
 
-        b.insert( bm::value_type(1,100) );
-        result = b.right.modify_data( b.right.begin(), _data = 2 );
+        b.insert(bm::value_type(1, 100));
+        result = b.right.modify_data(
+            b.right.begin()
+          , boost::bimaps::_data = 2
+        );
 
-        BOOST_CHECK( !result );
-        BOOST_CHECK( b.size() == 1 );
-        BOOST_CHECK( b.left.find(1) == b.left.end() );
-        BOOST_CHECK( b.right.find(100) == b.right.end() );
+        BOOST_TEST(!result);
+        BOOST_TEST(b.size() == 1);
+        BOOST_TEST(b.left.find(1) == b.left.end());
+        BOOST_TEST(b.right.find(100) == b.right.end());
     }
 }
 
 void test_bimap_replace_with_info() 
 {
-    using namespace boost::bimaps;
-    typedef bimap<int,long,with_info<int> > bm;
+    typedef boost::bimaps
+    ::bimap<int,long,boost::bimaps::with_info<int> > bm;
 
     bm b;
-    b.insert( bm::value_type(2,200,-2) );
+    b.insert(bm::value_type(2, 200, -2));
 
-    BOOST_CHECK( b.left.at(2)      == 200 );
-    BOOST_CHECK( b.left.info_at(2) ==  -2 );
- 
+    BOOST_TEST(b.left.at(2) == 200);
+    BOOST_TEST(b.left.info_at(2) == -2);
+
     // Use set view
     {
         bm::iterator i = b.begin();
 
-        bool result = b.replace( i, bm::value_type(1,100,-1) );
+        bool result = b.replace(i, bm::value_type(1, 100, -1));
 
-        BOOST_CHECK( result );
-        BOOST_CHECK( b.size() == 1 );
-        BOOST_CHECK( i->left == 1 && i->right == 100 );
-        BOOST_CHECK( i->info == -1 );
-        
-        result = b.replace_left( i, 2 );
+        BOOST_TEST(result);
+        BOOST_TEST(b.size() == 1);
+        BOOST_TEST((i->left == 1) && (i->right == 100));
+        BOOST_TEST(i->info == -1);
 
-        BOOST_CHECK( result );
-        BOOST_CHECK( b.size() == 1 );
-        BOOST_CHECK( i->left == 2 && i->right == 100 );
-        BOOST_CHECK( i->info == -1 );
-        
-        result = b.replace_right( i, 200 );
+        result = b.replace_left(i, 2);
 
-        BOOST_CHECK( result );
-        BOOST_CHECK( b.size() == 1 );
-        BOOST_CHECK( i->left == 2 && i->right == 200 );
-        BOOST_CHECK( i->info == -1 );
+        BOOST_TEST(result);
+        BOOST_TEST(b.size() == 1);
+        BOOST_TEST((i->left == 2) && (i->right == 100));
+        BOOST_TEST(i->info == -1);
+
+        result = b.replace_right(i, 200);
+
+        BOOST_TEST(result);
+        BOOST_TEST(b.size() == 1);
+        BOOST_TEST((i->left == 2) && (i->right == 200));
+        BOOST_TEST(i->info == -1);
     }
 
     // Use map view
     {
         bm::left_iterator i = b.left.begin();
 
-        bool result = b.left.replace( i, bm::left_value_type(1,100,-1) );
+        bool result = b.left.replace(i, bm::left_value_type(1, 100, -1));
 
-        BOOST_CHECK( result );
-        BOOST_CHECK( b.left.size() == 1 );
-        BOOST_CHECK( i->first == 1 && i->second == 100 );
-        BOOST_CHECK( i->info == -1 );
-        
-        result = b.left.replace_key( i, 2 );
+        BOOST_TEST(result);
+        BOOST_TEST(b.left.size() == 1);
+        BOOST_TEST((i->first == 1) && (i->second == 100));
+        BOOST_TEST(i->info == -1);
 
-        BOOST_CHECK( result );
-        BOOST_CHECK( b.left.size() == 1 );
-        BOOST_CHECK( i->first == 2 && i->second == 100 );
-        BOOST_CHECK( i->info == -1 );
-        
-        result = b.left.replace_data( i, 200 );
+        result = b.left.replace_key(i, 2);
 
-        BOOST_CHECK( result );
-        BOOST_CHECK( b.left.size() == 1 );
-        BOOST_CHECK( i->first == 2 && i->second == 200 );
-        BOOST_CHECK( i->info == -1 );
+        BOOST_TEST(result);
+        BOOST_TEST(b.left.size() == 1);
+        BOOST_TEST((i->first == 2) && (i->second == 100));
+        BOOST_TEST(i->info == -1);
+
+        result = b.left.replace_data(i, 200);
+
+        BOOST_TEST(result);
+        BOOST_TEST(b.left.size() == 1);
+        BOOST_TEST((i->first == 2) && (i->second == 200));
+        BOOST_TEST(i->info == -1);
     }
 }
 
-int test_main( int, char* [] )
+int main(int, char*[])
 {
     test_bimap_modify();
-
     test_bimap_replace_with_info();
-    
-    return 0;
+    return boost::report_errors();
 }
 
