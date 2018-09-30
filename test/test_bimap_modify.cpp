@@ -258,42 +258,42 @@ void test_bimap_modify()
         BOOST_CHECK( b.right.at(100) == 1 );
     }
 
-    b.clear();
-    b.insert( bm::value_type(1,100) );
-    b.insert( bm::value_type(2,200) );
-
     // fail to modify in left map view
     {
+        b.insert( bm::value_type(2,200) );
         result = b.left.modify_key( b.left.begin(), _key = 2 );
 
         BOOST_CHECK( !result );
-        BOOST_CHECK( b.size() == 2 );
-        BOOST_CHECK( b.left.at(1) == 100 );
-        BOOST_CHECK( b.right.at(100) == 1 );
+        BOOST_CHECK( b.size() == 1 );
+        BOOST_CHECK( b.left.find(1) == b.left.end() );
+        BOOST_CHECK( b.right.find(100) == b.right.end() );
 
+        b.insert( bm::value_type(1,100) );
         result = b.left.modify_data( b.left.begin(), _data = 200 );
 
         BOOST_CHECK( !result );
-        BOOST_CHECK( b.size() == 2 );
-        BOOST_CHECK( b.left.at(1) == 100 );
-        BOOST_CHECK( b.right.at(100) == 1 );
+        BOOST_CHECK( b.size() == 1 );
+        BOOST_CHECK( b.left.find(1) == b.left.end() );
+        BOOST_CHECK( b.right.find(100) == b.right.end() );
     }
 
     // fail to modify in right map view
     {
+        b.insert( bm::value_type(1,100) );
         result = b.right.modify_key( b.right.begin(), _key = 200 );
 
         BOOST_CHECK( !result );
-        BOOST_CHECK( b.size() == 2 );
-        BOOST_CHECK( b.left.at(1) == 100 );
-        BOOST_CHECK( b.right.at(100) == 1 );
+        BOOST_CHECK( b.size() == 1 );
+        BOOST_CHECK( b.left.find(1) == b.left.end() );
+        BOOST_CHECK( b.right.find(100) == b.right.end() );
 
+        b.insert( bm::value_type(1,100) );
         result = b.right.modify_data( b.right.begin(), _data = 2 );
 
         BOOST_CHECK( !result );
-        BOOST_CHECK( b.size() == 2 );
-        BOOST_CHECK( b.left.at(1) == 100 );
-        BOOST_CHECK( b.right.at(100) == 1 );
+        BOOST_CHECK( b.size() == 1 );
+        BOOST_CHECK( b.left.find(1) == b.left.end() );
+        BOOST_CHECK( b.right.find(100) == b.right.end() );
     }
 }
 
